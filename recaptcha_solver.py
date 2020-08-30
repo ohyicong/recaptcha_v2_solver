@@ -72,6 +72,7 @@ sound = pydub.AudioSegment.from_mp3(os.getcwd()+"\\sample.mp3")
 sound.export(os.getcwd()+"\\sample.wav", format="wav")
 sample_audio = sr.AudioFile(os.getcwd()+"\\sample.wav")
 r= sr.Recognizer()
+
 with sample_audio as source:
     audio = r.record(source)
 
