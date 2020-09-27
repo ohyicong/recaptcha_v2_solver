@@ -32,9 +32,12 @@ import pydub
 
 def delay ():
     time.sleep(random.randint(2,3))
+
 #create chrome driver
 driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
 
+
+delay()
 #go to website
 driver.get("https://www.google.com/recaptcha/api2/demo")
 
@@ -83,3 +86,7 @@ print("[INFO] Recaptcha Passcode: %s"%key)
 #key in results and submit
 driver.find_element_by_id("audio-response").send_keys(key.lower())
 driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
+driver.switch_to.default_content()
+delay()
+driver.find_element_by_id("recaptcha-demo-submit").click()
+delay()
