@@ -87,15 +87,15 @@ count_failures=0
 
 #endless loop
 while(True):
-    print("[INFO] *Changing MAC & IP*")
-    print("[INFO] New Mac is: "+random_mac_address(interface_name))
-    delay(3,5)
-    change_ip(interface_name,ip_address,mask,gateway)
-    delay(3,5)
-    print("[INFO] Start Browser")
-    driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
-    for i in range(20):
-        try:
+    try:
+        print("[INFO] *Changing MAC & IP*")
+        print("[INFO] New Mac is: "+random_mac_address(interface_name))
+        delay(3,5)
+        change_ip(interface_name,ip_address,mask,gateway)
+        delay(3,5)
+        print("[INFO] Start Browser")
+        driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
+        for i in range(10):   
             count_loops+=1
             #go to website
             driver.get("https://www.google.com/recaptcha/api2/demo")
@@ -124,58 +124,47 @@ while(True):
             frames= driver.find_elements_by_tag_name("iframe")
             driver.switch_to.frame(frames[-1])
             delay()
-        except:
-            count_failures+=1
-            print("[WARN] Something went wrong. Total Loops: %d, Total Failures %d"%(count_loops,count_failures))
-            print("[INFO] Reopening Driver")
-            driver.close()
-            driver.quit()
-            break
-        #click on the play button
-        is_validation_successful = False
-        while(not is_validation_successful):
-            try:
-                driver.find_element_by_xpath("/html/body/div/div/div[3]/div/button").click()
-                
-                #get the mp3 audio file
-                src = driver.find_element_by_id("audio-source").get_attribute("src")
-                print("[INFO] Audio src: %s"%src)
-                #download the mp3 audio file from the source
-                urllib.request.urlretrieve(src, os.getcwd()+"\\sample.mp3")
-                sound = pydub.AudioSegment.from_mp3(os.getcwd()+"\\sample.mp3")
-                sound.export(os.getcwd()+"\\sample.wav", format="wav")
-                sample_audio = sr.AudioFile(os.getcwd()+"\\sample.wav")
-                r= sr.Recognizer()
-                
-                with sample_audio as source:
-                    audio = r.record(source)
-                
-                #translate audio to text with google voice recognition
-                key=r.recognize_google(audio)
-                print("[INFO] Recaptcha Passcode: %s"%key)
-                
-                #key in results and submit
-        
-                driver.find_element_by_id("audio-response").send_keys(key.lower())
-                delay()
-                driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
-                delay()
-                #check for failure message
-                print(driver.find_element_by_class_name("rc-audiochallenge-error-message").text)
-            except:
-                is_validation_successful=True
-                print("[INFO] Validation Successful")
-                break
-        
-        try:
+            #click on the play button
+            driver.find_element_by_xpath("/html/body/div/div/div[3]/div/button").click()
+            #get the mp3 audio file
+            src = driver.find_element_by_id("audio-source").get_attribute("src")
+            print("[INFO] Audio src: %s"%src)
+            #download the mp3 audio file from the source
+            urllib.request.urlretrieve(src, os.getcwd()+"\\sample.mp3")
+            sound = pydub.AudioSegment.from_mp3(os.getcwd()+"\\sample.mp3")
+            sound.export(os.getcwd()+"\\sample.wav", format="wav")
+            sample_audio = sr.AudioFile(os.getcwd()+"\\sample.wav")
+            r= sr.Recognizer()
+            
+            with sample_audio as source:
+                audio = r.record(source)
+            
+            #translate audio to text with google voice recognition
+            key=r.recognize_google(audio)
+            print("[INFO] Recaptcha Passcode: %s"%key)
+            #key in results and submit
+            delay()
+            for letter in key.lower().split():
+                driver.find_element_by_id("audio-response").send_keys(letter)
+                delay(1,3)
+            delay()
+            driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
+            delay()
+            print("[INFO] Validation Successful")
             driver.switch_to.default_content()
             delay()
             driver.find_element_by_id("recaptcha-demo-submit").click()
             delay()
-            print("[INFO] Loop Completed. Total Loops: %d, Total Failures %d"%(count_loops,count_failures))
-        except:
-            print("[INFO] Network is fine. GUI Error. Restarting. Count voided.")
-            count_loops-=1
-            break
-        
+            print("[INFO] Loop Completed (%d). Total Loops: %d, Total Failures %d"%(i+1,count_loops,count_failures))
+            print("[INFO] Waiting for 10 seconds.. before trying again ")
+            delay(10,10)
+        driver.close()
+        driver.quit()    
+    except:
+        count_failures+=1
+        print("[WARN] Something went wrong. Total Loops: %d, Total Failures %d"%(count_loops,count_failures))
+        print("[INFO] Reopening Driver")
+        driver.close()
+        driver.quit()
+
        
