@@ -33,13 +33,15 @@ import pydub
 def delay ():
     time.sleep(random.randint(2,3))
 
-#create chrome driver
-driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
-
-
-delay()
-#go to website
-driver.get("https://www.google.com/recaptcha/api2/demo")
+try:
+    #create chrome driver
+    driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
+    delay()
+    #go to website
+    driver.get("https://www.google.com/recaptcha/api2/demo")
+    
+except:
+    print("[-] Please update the chromedriver.exe in the webdriver folder according to your chrome version:https://chromedriver.chromium.org/downloads")
 
 #switch to recaptcha frame
 frames=driver.find_elements_by_tag_name("iframe")
