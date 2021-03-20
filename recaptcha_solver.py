@@ -7,6 +7,7 @@ Created on Sun Aug 16 10:01:10 2020
 
 #system libraries
 import os
+import sys
 import random
 import time
 
@@ -25,17 +26,16 @@ from selenium.webdriver.chrome.options import Options
 
 #recaptcha libraries
 import speech_recognition as sr
-import ffmpy
-import requests
 import urllib
 import pydub
+
 
 def delay ():
     time.sleep(random.randint(2,3))
 
 try:
     #create chrome driver
-    driver = webdriver.Chrome(os.getcwd()+"\\webdriver\\chromedriver.exe") 
+    driver = webdriver.Chrome(os.path.normpath(os.getcwd()+"\\webdriver\\chromedriver.exe")) 
     delay()
     #go to website
     driver.get("https://www.google.com/recaptcha/api2/demo")
@@ -72,10 +72,16 @@ driver.find_element_by_xpath("/html/body/div/div/div[3]/div/button").click()
 src = driver.find_element_by_id("audio-source").get_attribute("src")
 print("[INFO] Audio src: %s"%src)
 #download the mp3 audio file from the source
-urllib.request.urlretrieve(src, os.getcwd()+"\\sample.mp3")
-sound = pydub.AudioSegment.from_mp3(os.getcwd()+"\\sample.mp3")
-sound.export(os.getcwd()+"\\sample.wav", format="wav")
-sample_audio = sr.AudioFile(os.getcwd()+"\\sample.wav")
+urllib.request.urlretrieve(src, os.path.normpath(os.getcwd()+"\\sample.mp3"))
+delay()
+#load downloaded mp3 audio file as .wav
+try:
+    sound = pydub.AudioSegment.from_mp3(os.path.normpath(os.getcwd()+"\\sample.mp3"))
+    sound.export(os.path.normpath(os.getcwd()+"\\sample.wav"), format="wav")
+    sample_audio = sr.AudioFile(os.path.normpath(os.getcwd()+"\\sample.wav"))
+except:
+    print("[-] Please run program as administrator")
+    
 r= sr.Recognizer()
 
 with sample_audio as source:
