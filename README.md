@@ -1,8 +1,8 @@
 # Recaptcha v2 solver
-A simple program to bypass recaptcha version 2 using audio verification method. 
-This program only demostrates how to bypass recaptcha on https://www.google.com/recaptcha/api2/demo
-You need to readapt this program to work on other websites. It is difficult to make the code general as websites are built differently.
-If you have a great idea, do let me know!
+A simple program to bypass recaptcha version 2 using audio verification method. <br>
+This program only demostrates how to bypass recaptcha on https://www.google.com/recaptcha/api2/demo<br>
+You need to readapt this program to work on other websites. It is difficult to make the code general as websites are built differently.<br>
+If you have a great idea, do let me know!<br>
 
 ## OS support
 1. Windows
@@ -16,7 +16,7 @@ If you have a great idea, do let me know!
 5. ffmpy 
 
 ## Usage
-python recaptcha_solver.py
+python recaptcha_solver.py<br>
 
 ## Common errors
 Q1. NameError: name 'sample_audio' is not defined <br>
