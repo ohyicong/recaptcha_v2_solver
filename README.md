@@ -1,4 +1,4 @@
-# Recaptcha_v2_solver
+# Recaptcha v2 solver
 A simple program to bypass recaptcha version 2 using audio verification method. 
 This program only demostrates how to bypass recaptcha on https://www.google.com/recaptcha/api2/demo
 You need to readapt this program to work on other websites. It is difficult to make the code general as websites are built differently.
