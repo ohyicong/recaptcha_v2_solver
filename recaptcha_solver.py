@@ -5,18 +5,18 @@ Created on Sun Aug 16 10:01:10 2020
 @author: OHyic
 """
 
-#system libraries
+# system libraries
 import os
 import sys
 import random
 import time
 
-#selenium libraries
+# selenium libraries
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException   
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
