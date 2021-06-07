@@ -24,13 +24,13 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.chrome.options import Options
 
-#recaptcha libraries
+# recaptcha libraries
 import speech_recognition as sr
 import urllib
 import pydub
 
-#custom patch libraries
-import patch 
+# custom patch libraries
+import patch
 
 
 def delay():
@@ -47,8 +47,8 @@ if __name__ == "__main__":
             # go to website
             driver.get("https://www.google.com/recaptcha/api2/demo")
             break
-        except:
-            #patch chromedriver if not available or outdated
+        except Exception:
+            # patch chromedriver if not available or outdated
             try:
                 driver
             except NameError:
