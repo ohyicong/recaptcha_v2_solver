@@ -4,16 +4,13 @@ Created on Sun May 23 14:44:43 2021
 
 @author: Yicong
 """
-#!/usr/bin/env python3
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import WebDriverException, SessionNotCreatedException
-import sys
+# !/usr/bin/env python3
 import os
-import urllib.request
 import re
-import zipfile
 import stat
+import sys
+import urllib.request
+import zipfile
 from sys import platform
 
 def download_lastest_chromedriver(current_chrome_version=""):
