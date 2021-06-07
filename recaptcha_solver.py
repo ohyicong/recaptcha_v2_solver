@@ -52,11 +52,12 @@ if __name__ == "__main__":
             try:
                 driver
             except NameError:
-                is_patched = patch.download_lastest_chromedriver()
+                is_patched = patch.download_latest_chromedriver()
             else:
-                is_patched = patch.download_lastest_chromedriver(driver.capabilities['version'])
-            if (not is_patched): 
-                print("[-] Please update the chromedriver.exe in the webdriver folder according to your chrome version:https://chromedriver.chromium.org/downloads")
+                is_patched = patch.download_latest_chromedriver(driver.capabilities['version'])
+            if not is_patched:
+                print("[-] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
+                      "https://chromedriver.chromium.org/downloads")
                 break
 
     # main program
