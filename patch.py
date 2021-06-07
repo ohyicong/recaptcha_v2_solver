@@ -13,7 +13,8 @@ import urllib.request
 import zipfile
 from sys import platform
 
-def download_lastest_chromedriver(current_chrome_version=""):
+
+def download_latest_chromedriver(current_chrome_version=''):
     def get_platform_filename():
         filename = ''
         is_64bits = sys.maxsize > 2 ** 32
@@ -75,11 +76,11 @@ def download_lastest_chromedriver(current_chrome_version=""):
 
             st = os.stat(chromedriver_path)
             os.chmod(chromedriver_path, st.st_mode | stat.S_IEXEC)
-            print('[+] lastest chromedriver downloaded.')
+            print('[+] latest chromedriver downloaded.')
             # Cleanup.
             os.remove(file_path)
             result = True
     except Exception:
-        print("[-] unable to download lastest chromedriver. the system will use the local version instead.")
-    
+        print('[-] unable to download latest chromedriver. the system will use the local version instead.')
+
     return result
