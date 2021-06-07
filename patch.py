@@ -23,11 +23,11 @@ def download_latest_chromedriver(current_chrome_version=''):
             # Linux
             filename += 'linux'
             filename += '64' if is_64bits else '32'
-        elif platform == "darwin":
+        elif platform == 'darwin':
             # OS X
             filename += 'mac64'
-        elif platform == "win32":
-            # Windows...
+        elif platform == 'win32':
+            # Windows
             filename += 'win32'
 
         filename += '.zip'
@@ -41,8 +41,8 @@ def download_latest_chromedriver(current_chrome_version=''):
         url = 'https://chromedriver.chromium.org/downloads'
         base_driver_url = 'https://chromedriver.storage.googleapis.com/'
         file_name = 'chromedriver_' + get_platform_filename()
-        pattern = 'https://.*?path=(\d+\.\d+\.\d+\.\d+)'
-    
+        pattern = r'https://.*?path=(\d+\.\d+\.\d+\.\d+)'
+
         # Download latest chromedriver.
         stream = urllib.request.urlopen(url)
         content = stream.read().decode('utf8')
@@ -59,14 +59,14 @@ def download_latest_chromedriver(current_chrome_version=''):
                 version_match = [i for i in all_match if re.search('^%s' % current_chrome_version, i)]
                 version = version_match[0]
             else:
-                print("[+] installing new chromedriver")
+                print('[+] installing new chromedriver')
                 version = all_match[1]
             driver_url = base_driver_url + version + '/' + file_name
 
             # Download the file.
             print('[+] downloading chromedriver ver: %s: %s' % (version, driver_url))
             app_path = os.path.dirname(os.path.realpath(__file__))
-            chromedriver_path = os.path.normpath(app_path+"\\webdriver\\chromedriver.exe")
+            chromedriver_path = os.path.normpath(app_path + '\\webdriver\\chromedriver.exe')
             file_path = os.path.normpath(app_path + '\\webdriver\\' + file_name)
             urllib.request.urlretrieve(driver_url, file_path)
 
