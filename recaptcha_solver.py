@@ -23,7 +23,7 @@ import patch
 
 
 def delay():
-    time.sleep(random.randint(2, 3))
+    driver.implicitly_wait(5)
 
 
 if __name__ == "__main__":
