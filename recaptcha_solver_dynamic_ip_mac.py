@@ -14,9 +14,9 @@ import sys
 import time
 import urllib
 
+# recaptcha libraries
 import netifaces
 import pydub
-# recaptcha libraries
 import speech_recognition as sr
 # selenium libraries
 from selenium import webdriver
