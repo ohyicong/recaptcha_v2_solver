@@ -22,8 +22,8 @@ from selenium.webdriver.common.keys import Keys
 import patch
 
 
-def delay():
-    driver.implicitly_wait(5)
+def delay(waiting_time=5):
+    driver.implicitly_wait(waiting_time)
 
 
 if __name__ == "__main__":

@@ -28,8 +28,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from spoofmac.util import random_mac_address
 
 
-def delay():
-    driver.implicitly_wait(5)
+def delay(waiting_time=5):
+    driver.implicitly_wait(waiting_time)
 
 
 def change_ip(interface_name, ip_address, mask, gateway):
