@@ -61,7 +61,7 @@ def get_default_network_details():
                 print("[INFO] IP Address: ", ip_address)
                 print("[INFO] Mask: ", netifaces.ifaddresses(i)[netifaces.AF_INET][0]['netmask'])
                 print("[INFO] Gateway: ", netifaces.gateways()['default'][netifaces.AF_INET][0])
-                delay(5, 5)
+                delay()
                 return ip_address, \
                        netifaces.ifaddresses(i)[netifaces.AF_INET][0]['netmask'], \
                        netifaces.gateways()['default'][netifaces.AF_INET][0]
@@ -81,9 +81,9 @@ while True:
     try:
         print("[INFO] *Changing MAC & IP*")
         print("[INFO] New Mac is: " + random_mac_address(interface_name))
-        delay(3, 5)
+        delay()
         change_ip(interface_name, ip_address, mask, gateway)
-        delay(3, 5)
+        delay()
         print("[INFO] Start Browser")
         driver = webdriver.Chrome(os.getcwd() + "\\webdriver\\chromedriver.exe")
         for i in range(10):
@@ -135,7 +135,7 @@ while True:
             delay()
             for letter in key.lower().split():
                 driver.find_element_by_id("audio-response").send_keys(letter)
-                delay(1, 3)
+                delay()
             delay()
             driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
             delay()
@@ -147,7 +147,7 @@ while True:
             print(
                 "[INFO] Loop Completed (%d). Total Loops: %d, Total Failures %d" % (i + 1, count_loops, count_failures))
             print("[INFO] Waiting for 10 seconds.. before trying again ")
-            delay(10, 10)
+            delay(10)
         driver.close()
         driver.quit()
     except Exception:
