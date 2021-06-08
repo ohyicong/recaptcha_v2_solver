@@ -7,8 +7,6 @@ Created on Sun Aug 16 10:01:10 2020
 
 # system libraries
 import os
-import random
-import time
 import urllib
 
 # recaptcha libraries
