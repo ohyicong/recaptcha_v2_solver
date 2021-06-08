@@ -6,43 +6,26 @@ Created on Sun Aug 16 10:01:10 2020
 """
 
 # system libraries
-import subprocess
-import random
 import os
 import random
-import time
+import socket
+import subprocess
 import sys
-# selenium libraries
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import UnexpectedAlertPresentException
-from selenium.webdriver.chrome.options import Options
+import time
+import urllib
 
+import netifaces
+import pydub
 # recaptcha libraries
 import speech_recognition as sr
-import ffmpy
-import requests
-import urllib
-import pydub
-
+# selenium libraries
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 # Networking Libraries
-from spoofmac.util import random_mac_address, MAC_ADDRESS_R, normalize_mac_address
-from spoofmac.interface import (
-    wireless_port_names,
-    find_interfaces,
-    find_interface,
-    set_interface_mac,
-    get_os_spoofer
-)
-import socket
-import netifaces
+from spoofmac.util import random_mac_address
 
 
 def delay(low=3, high=5):
