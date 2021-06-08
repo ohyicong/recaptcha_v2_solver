@@ -38,7 +38,7 @@ def change_ip(interface_name, ip_address, mask, gateway):
     result_1 = subprocess.call(
         'netsh interface ipv4 set address name="%s" static %s %s %s' % (interface_name, ip_address, mask, gateway),
         shell=True)
-    result_2 = subprocess.call('netsh interface ipv4 set dns name="%s" static 8.8.8.8' % (interface_name), shell=True)
+    result_2 = subprocess.call('netsh interface ipv4 set dns name="%s" static 8.8.8.8' % interface_name, shell=True)
     if result_1 == 1 or result_2 == 1:
         print("[WARN] Unable to change IP. Run the program with admin rights.")
         sys.exit()
