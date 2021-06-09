@@ -1,6 +1,6 @@
 # Recaptcha v2 solver
 A simple program to bypass recaptcha version 2 using audio verification method. <br>
-This program only demostrates how to bypass recaptcha on https://www.google.com/recaptcha/api2/demo<br>
+This program only demonstrates how to bypass recaptcha on https://www.google.com/recaptcha/api2/demo<br>
 You need to readapt this program to work on other websites. It is difficult to make the code general as websites are built differently.<br>
 If you have a great idea, do let me know!<br>
 
@@ -11,9 +11,9 @@ If you have a great idea, do let me know!<br>
 ## Dependencies
 1. selenium
 2. pydub
-3. speech recongition 
+3. speech recognition
 4. ffmpeg
-5. ffmpy 
+5. ffmpy
 
 ## Usage
 python recaptcha_solver.py<br>
