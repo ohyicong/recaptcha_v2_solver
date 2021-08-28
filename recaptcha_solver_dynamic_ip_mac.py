@@ -62,7 +62,6 @@ def get_default_network_details():
                 print("[INFO] IP Address: ", ip_address)
                 print("[INFO] Mask: ", netifaces.ifaddresses(i)[netifaces.AF_INET][0]['netmask'])
                 print("[INFO] Gateway: ", netifaces.gateways()['default'][netifaces.AF_INET][0])
-                delay()
                 return ip_address, \
                        netifaces.ifaddresses(i)[netifaces.AF_INET][0]['netmask'], \
                        netifaces.gateways()['default'][netifaces.AF_INET][0]
@@ -97,7 +96,6 @@ while True:
             # switch to recaptcha frame
             frames = driver.find_elements_by_tag_name("iframe")
             driver.switch_to.frame(frames[0])
-            delay()
 
             # click on checkbox to activate recaptcha
             driver.find_element_by_class_name("recaptcha-checkbox-border").click()
@@ -106,7 +104,6 @@ while True:
             driver.switch_to.default_content()
             frames = driver.find_element_by_xpath("/html/body/div[2]/div[4]").find_elements_by_tag_name("iframe")
             driver.switch_to.frame(frames[0])
-            delay()
 
             # click on audio challenge
             driver.find_element_by_id("recaptcha-audio-button").click()
@@ -115,7 +112,6 @@ while True:
             driver.switch_to.default_content()
             frames = driver.find_elements_by_tag_name("iframe")
             driver.switch_to.frame(frames[-1])
-            delay()
             # get the mp3 audio file
             src = driver.find_element_by_id("audio-source").get_attribute("src")
             print("[INFO] Audio src: %s" % src)
@@ -133,16 +129,11 @@ while True:
             key = r.recognize_google(audio)
             print("[INFO] Recaptcha Passcode: %s" % key)
             # key in results and submit
-            delay()
             for letter in key.lower().split():
                 driver.find_element_by_id("audio-response").send_keys(letter)
-                delay()
-            delay()
             driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
-            delay()
             print("[INFO] Validation Successful")
             driver.switch_to.default_content()
-            delay()
             driver.find_element_by_id("recaptcha-demo-submit").click()
             print(f"[INFO] Loop Completed: {i + 1}. Total Loops: {count_loops}, Total Failures: {count_failures}")
             print("[INFO] Waiting for 10 seconds.. before trying again")
@@ -152,5 +143,4 @@ while True:
         count_failures += 1
         print("[WARN] Something went wrong. Total Loops: %d, Total Failures %d" % (count_loops, count_failures))
         print("[INFO] Reopening Driver")
-        driver.close()
         driver.quit()
