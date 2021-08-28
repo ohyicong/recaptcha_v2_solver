@@ -66,7 +66,7 @@ def download_latest_chromedriver(current_chrome_version=''):
             driver_url = '/'.join((base_driver_url, version, file_name))
 
             # Download the file.
-            print('[+] downloading chromedriver ver: %s: %s' % (version, driver_url))
+            print(f'[+] downloading chromedriver ver: {version}: {driver_url}')
             app_path = os.path.dirname(os.path.realpath(__file__))
             chromedriver_path = os.path.normpath(os.path.join(app_path, webdriver_folder_name, 'chromedriver.exe'))
             file_path = os.path.normpath(os.path.join(app_path, webdriver_folder_name, file_name))
