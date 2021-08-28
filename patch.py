@@ -14,26 +14,28 @@ import zipfile
 from sys import platform
 
 
+
+def get_platform_filename():
+    filename = ''
+    is_64bits = sys.maxsize > 2 ** 32
+
+    if platform == 'linux' or platform == 'linux2':
+        # Linux
+        filename += 'linux'
+        filename += '64' if is_64bits else '32'
+    elif platform == 'darwin':
+        # OS X
+        filename += 'mac64'
+    elif platform == 'win32':
+        # Windows
+        filename += 'win32'
+
+    filename += '.zip'
+
+    return filename
+
+
 def download_latest_chromedriver(current_chrome_version=''):
-    def get_platform_filename():
-        filename = ''
-        is_64bits = sys.maxsize > 2 ** 32
-
-        if platform == 'linux' or platform == 'linux2':
-            # Linux
-            filename += 'linux'
-            filename += '64' if is_64bits else '32'
-        elif platform == 'darwin':
-            # OS X
-            filename += 'mac64'
-        elif platform == 'win32':
-            # Windows
-            filename += 'win32'
-
-        filename += '.zip'
-
-        return filename
-
     # Find the latest chromedriver, download, unzip, set permissions to executable.
 
     try:
