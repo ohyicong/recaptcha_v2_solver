@@ -7,6 +7,7 @@ Created on Sun Aug 16 10:01:10 2020
 
 # system libraries
 import os
+import sys
 import urllib
 
 # recaptcha libraries
@@ -43,9 +44,9 @@ if __name__ == "__main__":
             else:
                 is_patched = patch.download_latest_chromedriver(driver.capabilities['version'])
             if not is_patched:
-                print("[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
-                      "https://chromedriver.chromium.org/downloads")
-                break
+                sys.exit(
+                    "[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
+                    "https://chromedriver.chromium.org/downloads")
 
     # main program
     # switch to recaptcha frame
@@ -85,8 +86,8 @@ if __name__ == "__main__":
         sound.export(os.path.normpath(os.getcwd() + "\\sample.wav"), format="wav")
         sample_audio = sr.AudioFile(os.path.normpath(os.getcwd() + "\\sample.wav"))
     except Exception:
-        print("[ERR] Please run program as administrator or download ffmpeg manually, "
-              "http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/")
+        sys.exit("[ERR] Please run program as administrator or download ffmpeg manually, "
+                 "https://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/")
 
     # translate audio to text with google voice recognition
     r = sr.Recognizer()
