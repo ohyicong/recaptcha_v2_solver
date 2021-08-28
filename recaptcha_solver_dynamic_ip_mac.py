@@ -27,22 +27,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 # Networking Libraries
 from spoofmac.util import random_mac_address
 
+# custom patch libraries
+from recaptcha_v2_solver.patch import webdriver_folder_name
+
 
 def delay(waiting_time=5):
     driver.implicitly_wait(waiting_time)
 
 
 def change_ip(interface_name, ip_address, mask, gateway):
-    ip_address = '.'.join(ip_address.split('.')[:-1]) + '.' + str(
+    ip_address = '.'.join(ip_address.split('.')[:-1]), str(
         random.randrange(8, 255 - int(mask.split('.')[-1]) - 1))
     result_1 = subprocess.call(
-        'netsh interface ipv4 set address name="%s" static %s %s %s' % (interface_name, ip_address, mask, gateway),
-        shell=True)
-    result_2 = subprocess.call('netsh interface ipv4 set dns name="%s" static 8.8.8.8' % interface_name, shell=True)
+        f'netsh interface ipv4 set address name="{interface_name}" static {ip_address} {mask} {gateway}', shell=True)
+    result_2 = subprocess.call(f'netsh interface ipv4 set dns name="{interface_name}" static 8.8.8.8', shell=True)
     if result_1 == 1 or result_2 == 1:
         print("[WARN] Unable to change IP. Run the program with admin rights.")
         sys.exit()
-    print("[INFO] New IP Address is: %s" % ip_address)
+    print(f"[INFO] New IP Address is: {ip_address}")
     return True
 
 
@@ -80,12 +82,12 @@ count_failures = 0
 while True:
     try:
         print("[INFO] *Changing MAC & IP*")
-        print("[INFO] New Mac is: " + random_mac_address(interface_name))
-        delay()
+        print("[INFO] New Mac is:", random_mac_address(interface_name))
         change_ip(interface_name, ip_address, mask, gateway)
-        delay()
         print("[INFO] Start Browser")
-        driver = webdriver.Chrome(os.getcwd() + "\\webdriver\\chromedriver.exe")
+        path_to_chromedriver = os.path.normpath(os.path.join(os.getcwd(), webdriver_folder_name, 'chromedriver'))
+        driver = webdriver.Chrome(path_to_chromedriver)
+        delay()
         for i in range(10):
             count_loops += 1
             # go to website
@@ -114,20 +116,26 @@ while True:
             driver.switch_to.frame(frames[-1])
             # get the mp3 audio file
             src = driver.find_element_by_id("audio-source").get_attribute("src")
-            print("[INFO] Audio src: %s" % src)
-            # download the mp3 audio file from the source
-            urllib.request.urlretrieve(src, os.getcwd() + "\\sample.mp3")
-            sound = pydub.AudioSegment.from_mp3(os.getcwd() + "\\sample.mp3")
-            sound.export(os.getcwd() + "\\sample.wav", format="wav")
-            sample_audio = sr.AudioFile(os.getcwd() + "\\sample.wav")
-            r = sr.Recognizer()
+            print(f"[INFO] Audio src: {src}")
 
-            with sample_audio as source:
-                audio = r.record(source)
+            path_to_mp3 = os.path.normpath(os.path.join(os.getcwd(), "sample.mp3"))
+            path_to_wav = os.path.normpath(os.path.join(os.getcwd(), "sample.wav"))
+
+            # download the mp3 audio file from the source
+            urllib.request.urlretrieve(src, path_to_mp3)
+
+            # load downloaded mp3 audio file as .wav
+            sound = pydub.AudioSegment.from_mp3(path_to_mp3)
+            sound.export(path_to_wav, format="wav")
+            sample_audio = sr.AudioFile(path_to_wav)
 
             # translate audio to text with google voice recognition
+            r = sr.Recognizer()
+            with sample_audio as source:
+                audio = r.record(source)
             key = r.recognize_google(audio)
-            print("[INFO] Recaptcha Passcode: %s" % key)
+            print(f"[INFO] Recaptcha Passcode: {key}")
+
             # key in results and submit
             for letter in key.lower().split():
                 driver.find_element_by_id("audio-response").send_keys(letter)
@@ -141,6 +149,6 @@ while True:
         driver.quit()
     except Exception:
         count_failures += 1
-        print("[WARN] Something went wrong. Total Loops: %d, Total Failures %d" % (count_loops, count_failures))
+        print(f"[WARN] Something went wrong. Total Loops: {count_loops}, Total Failures: {count_failures}")
         print("[INFO] Reopening Driver")
         driver.quit()
