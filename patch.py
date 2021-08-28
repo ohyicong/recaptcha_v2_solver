@@ -13,6 +13,7 @@ import urllib.request
 import zipfile
 from sys import platform
 
+webdriver_folder_name = 'webdriver'
 
 
 def get_platform_filename():
@@ -40,7 +41,7 @@ def download_latest_chromedriver(current_chrome_version=''):
 
     try:
         url = 'https://chromedriver.chromium.org/downloads'
-        base_driver_url = 'https://chromedriver.storage.googleapis.com/'
+        base_driver_url = 'https://chromedriver.storage.googleapis.com'
         file_name = 'chromedriver_' + get_platform_filename()
         pattern = r'https://.*?path=(\d+\.\d+\.\d+\.\d+)'
 
@@ -62,18 +63,18 @@ def download_latest_chromedriver(current_chrome_version=''):
             else:
                 print('[+] installing new chromedriver')
                 version = all_match[1]
-            driver_url = base_driver_url + version + '/' + file_name
+            driver_url = '/'.join((base_driver_url, version, file_name))
 
             # Download the file.
             print('[+] downloading chromedriver ver: %s: %s' % (version, driver_url))
             app_path = os.path.dirname(os.path.realpath(__file__))
-            chromedriver_path = os.path.normpath(app_path + '\\webdriver\\chromedriver.exe')
-            file_path = os.path.normpath(app_path + '\\webdriver\\' + file_name)
+            chromedriver_path = os.path.normpath(os.path.join(app_path, webdriver_folder_name, 'chromedriver.exe'))
+            file_path = os.path.normpath(os.path.join(app_path, webdriver_folder_name, file_name))
             urllib.request.urlretrieve(driver_url, file_path)
 
             # Unzip the file into folder
             with zipfile.ZipFile(file_path, 'r') as zip_ref:
-                zip_ref.extractall(os.path.normpath(app_path + '\\webdriver\\'))
+                zip_ref.extractall(os.path.normpath(os.path.join(app_path, webdriver_folder_name)))
 
             st = os.stat(chromedriver_path)
             os.chmod(chromedriver_path, st.st_mode | stat.S_IEXEC)
