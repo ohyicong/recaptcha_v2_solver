@@ -11,6 +11,7 @@ import random
 import socket
 import subprocess
 import sys
+import time
 import urllib
 
 # recaptcha libraries
@@ -143,12 +144,9 @@ while True:
             driver.switch_to.default_content()
             delay()
             driver.find_element_by_id("recaptcha-demo-submit").click()
-            delay()
-            print(
-                "[INFO] Loop Completed (%d). Total Loops: %d, Total Failures %d" % (i + 1, count_loops, count_failures))
-            print("[INFO] Waiting for 10 seconds.. before trying again ")
-            delay(10)
-        driver.close()
+            print(f"[INFO] Loop Completed: {i + 1}. Total Loops: {count_loops}, Total Failures: {count_failures}")
+            print("[INFO] Waiting for 10 seconds.. before trying again")
+            time.sleep(10)
         driver.quit()
     except Exception:
         count_failures += 1
