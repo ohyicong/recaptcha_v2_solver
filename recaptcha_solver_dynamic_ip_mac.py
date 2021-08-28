@@ -36,7 +36,7 @@ def delay(waiting_time=5):
 
 
 def change_ip(interface_name, ip_address, mask, gateway):
-    ip_address = '.'.join(ip_address.split('.')[:-1]), str(
+    ip_address = '.'.join(ip_address.split('.')[:-1]) + '.' + str(
         random.randrange(8, 255 - int(mask.split('.')[-1]) - 1))
     result_1 = subprocess.call(
         f'netsh interface ipv4 set address name="{interface_name}" static {ip_address} {mask} {gateway}', shell=True)
