@@ -36,7 +36,6 @@ def download_latest_chromedriver(current_chrome_version=''):
 
     # Find the latest chromedriver, download, unzip, set permissions to executable.
 
-    result = False
     try:
         url = 'https://chromedriver.chromium.org/downloads'
         base_driver_url = 'https://chromedriver.storage.googleapis.com/'
@@ -79,8 +78,7 @@ def download_latest_chromedriver(current_chrome_version=''):
             print('[+] latest chromedriver downloaded.')
             # Cleanup.
             os.remove(file_path)
-            result = True
+            return True
     except Exception:
         print('[-] unable to download latest chromedriver. the system will use the local version instead.')
-
-    return result
+        return False
