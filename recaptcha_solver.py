@@ -7,6 +7,7 @@ Created on Sun Aug 16 10:01:10 2020
 
 # system libraries
 import os
+import sys
 import urllib
 
 # recaptcha libraries
@@ -17,7 +18,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 # custom patch libraries
-import patch
+from patch import download_latest_chromedriver, webdriver_folder_name
 
 
 def delay(waiting_time=5):
@@ -29,7 +30,9 @@ if __name__ == "__main__":
     while True:
         try:
             # create chrome driver
-            driver = webdriver.Chrome(os.path.normpath(os.getcwd() + "\\webdriver\\chromedriver.exe"))
+            path_to_chromedriver = os.path.normpath(
+                os.path.join(os.getcwd(), webdriver_folder_name, 'chromedriver.exe'))
+            driver = webdriver.Chrome(path_to_chromedriver)
             delay()
             # go to website
             driver.get("https://www.google.com/recaptcha/api2/demo")
@@ -39,19 +42,18 @@ if __name__ == "__main__":
             try:
                 driver
             except NameError:
-                is_patched = patch.download_latest_chromedriver()
+                is_patched = download_latest_chromedriver()
             else:
-                is_patched = patch.download_latest_chromedriver(driver.capabilities['version'])
+                is_patched = download_latest_chromedriver(driver.capabilities['version'])
             if not is_patched:
-                print("[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
-                      "https://chromedriver.chromium.org/downloads")
-                break
+                sys.exit(
+                    "[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
+                    "https://chromedriver.chromium.org/downloads")
 
     # main program
     # switch to recaptcha frame
     frames = driver.find_elements_by_tag_name("iframe")
     driver.switch_to.frame(frames[0])
-    delay()
 
     # click on checkbox to activate recaptcha
     driver.find_element_by_class_name("recaptcha-checkbox-border").click()
@@ -60,7 +62,6 @@ if __name__ == "__main__":
     driver.switch_to.default_content()
     frames = driver.find_element_by_xpath("/html/body/div[2]/div[4]").find_elements_by_tag_name("iframe")
     driver.switch_to.frame(frames[0])
-    delay()
 
     # click on audio challenge
     driver.find_element_by_id("recaptcha-audio-button").click()
@@ -69,36 +70,35 @@ if __name__ == "__main__":
     driver.switch_to.default_content()
     frames = driver.find_elements_by_tag_name("iframe")
     driver.switch_to.frame(frames[-1])
-    delay()
 
     # get the mp3 audio file
     src = driver.find_element_by_id("audio-source").get_attribute("src")
-    print("[INFO] Audio src: %s" % src)
+    print(f"[INFO] Audio src: {src}")
+
+    path_to_mp3 = os.path.normpath(os.path.join(os.getcwd(), "sample.mp3"))
+    path_to_wav = os.path.normpath(os.path.join(os.getcwd(), "sample.wav"))
 
     # download the mp3 audio file from the source
-    urllib.request.urlretrieve(src, os.path.normpath(os.getcwd() + "\\sample.mp3"))
-    delay()
+    urllib.request.urlretrieve(src, path_to_mp3)
 
     # load downloaded mp3 audio file as .wav
     try:
-        sound = pydub.AudioSegment.from_mp3(os.path.normpath(os.getcwd() + "\\sample.mp3"))
-        sound.export(os.path.normpath(os.getcwd() + "\\sample.wav"), format="wav")
-        sample_audio = sr.AudioFile(os.path.normpath(os.getcwd() + "\\sample.wav"))
+        sound = pydub.AudioSegment.from_mp3(path_to_mp3)
+        sound.export(path_to_wav, format="wav")
+        sample_audio = sr.AudioFile(path_to_wav)
     except Exception:
-        print("[ERR] Please run program as administrator or download ffmpeg manually, "
-              "http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/")
+        sys.exit("[ERR] Please run program as administrator or download ffmpeg manually, "
+                 "https://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/")
 
     # translate audio to text with google voice recognition
     r = sr.Recognizer()
     with sample_audio as source:
         audio = r.record(source)
     key = r.recognize_google(audio)
-    print("[INFO] Recaptcha Passcode: %s" % key)
+    print(f"[INFO] Recaptcha Passcode: {key}")
 
     # key in results and submit
     driver.find_element_by_id("audio-response").send_keys(key.lower())
     driver.find_element_by_id("audio-response").send_keys(Keys.ENTER)
     driver.switch_to.default_content()
-    delay()
     driver.find_element_by_id("recaptcha-demo-submit").click()
-    delay()
