@@ -18,6 +18,9 @@ If you have a great idea, do let me know!<br>
 ## Usage
 python recaptcha_solver.py<br>
 
+## Updates
+[23 Sept 21] Auto detection of recaptcha. The script "may" work in other pages.
+
 ## Common errors
 Q1. NameError: name 'sample_audio' is not defined <br>
 A1. Try installing ffmpeg manually, http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/

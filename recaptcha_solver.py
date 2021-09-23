@@ -20,10 +20,8 @@ from selenium.webdriver.common.keys import Keys
 # custom patch libraries
 from patch import download_latest_chromedriver, webdriver_folder_name
 
-
 def delay(waiting_time=5):
     driver.implicitly_wait(waiting_time)
-
 
 if __name__ == "__main__":
     # download latest chromedriver, please ensure that your chrome is up to date
@@ -49,19 +47,30 @@ if __name__ == "__main__":
                 sys.exit(
                     "[ERR] Please update the chromedriver.exe in the webdriver folder according to your chrome version:"
                     "https://chromedriver.chromium.org/downloads")
-
     # main program
+    # auto locate recaptcha frames
+    frames = driver.find_elements_by_tag_name("iframe")
+    recaptcha_control_frame = None
+    recaptcha_challenge_frame = None
+    for index,frame in enumerate(frames):
+        if (frame.get_attribute("title")=="reCAPTCHA"):
+            recaptcha_control_frame = frame
+        if (frame.get_attribute("title")=="recaptcha challenge"):
+            recaptcha_challenge_frame = frame
+    if (not (recaptcha_control_frame and recaptcha_challenge_frame)):
+        print("[ERR] Unable to find recaptcha. Abort solver.")
+        exit()
     # switch to recaptcha frame
     frames = driver.find_elements_by_tag_name("iframe")
-    driver.switch_to.frame(frames[0])
+    driver.switch_to.frame(recaptcha_control_frame)
 
     # click on checkbox to activate recaptcha
     driver.find_element_by_class_name("recaptcha-checkbox-border").click()
 
     # switch to recaptcha audio control frame
     driver.switch_to.default_content()
-    frames = driver.find_element_by_xpath("/html/body/div[2]/div[4]").find_elements_by_tag_name("iframe")
-    driver.switch_to.frame(frames[0])
+    frames = driver.find_elements_by_tag_name("iframe")
+    driver.switch_to.frame(recaptcha_challenge_frame)
 
     # click on audio challenge
     driver.find_element_by_id("recaptcha-audio-button").click()
@@ -69,7 +78,7 @@ if __name__ == "__main__":
     # switch to recaptcha audio challenge frame
     driver.switch_to.default_content()
     frames = driver.find_elements_by_tag_name("iframe")
-    driver.switch_to.frame(frames[-1])
+    driver.switch_to.frame(recaptcha_challenge_frame)
 
     # get the mp3 audio file
     src = driver.find_element_by_id("audio-source").get_attribute("src")
