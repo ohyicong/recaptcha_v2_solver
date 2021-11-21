@@ -9,12 +9,9 @@ Created on Sun Aug 16 10:01:10 2020
 import os
 import sys
 import urllib
-
-# recaptcha libraries
 import pydub
 import speech_recognition as sr
-
-# selenium libraries
+import re
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -60,13 +57,14 @@ if __name__ == "__main__":
     recaptcha_control_frame = None
     recaptcha_challenge_frame = None
     for index, frame in enumerate(frames):
-        if frame.get_attribute("title") == "reCAPTCHA":
+        if re.search('reCAPTCHA', frame.get_attribute("title")):
             recaptcha_control_frame = frame
-        if frame.get_attribute("title") == "recaptcha challenge":
+            
+        if re.search('recaptcha challenge', frame.get_attribute("title")):
             recaptcha_challenge_frame = frame
     if not (recaptcha_control_frame and recaptcha_challenge_frame):
         print("[ERR] Unable to find recaptcha. Abort solver.")
-        exit()
+        sys.exit()
     # switch to recaptcha frame
     frames = driver.find_elements_by_tag_name("iframe")
     driver.switch_to.frame(recaptcha_control_frame)
