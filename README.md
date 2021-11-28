@@ -21,7 +21,8 @@ python recaptcha_solver.py<br>
 
 ## Updates
 [23 Sept 21] Auto detection of recaptcha. With this functionality, this script may work for other pages. <br>
-[28 Nov  21] Using Tor connection to randomise your IP address. This technique is used to bypass "Your Computer or Network May Be Sending Automated Queries."<br> 
+[28 Nov  21] Using Tor connection to randomise your IP address. <br>
+This technique is used to bypass "Your Computer or Network May Be Sending Automated Queries."<br> 
 It can be activated by setting "activate_tor = True". <br>
 As the Tor ip address is shared, some other users may use it for same purpose, which causes the IP address to be blacklisted.<br> 
 The success rate of using this technique is about 10%.<br>
