@@ -30,7 +30,9 @@ The success rate of using this technique is about 10%.<br>
 
 ## Common errors
 Q1. NameError: name 'sample_audio' is not defined <br>
-A1. Try installing ffmpeg manually, http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/
+A1. Try installing ffmpeg manually, http://blog.gregzaal.com/how-to-install-ffmpeg-on-windows/<br>
+Q2. Your Computer or Network May Be Sending Automated Queries. <br>
+A2. Change activate_tor = True, you may be able to bypass it after a few tries.<br>
 
 ## Video tutorial
 https://www.youtube.com/watch?v=Fdu81T9GgMA
